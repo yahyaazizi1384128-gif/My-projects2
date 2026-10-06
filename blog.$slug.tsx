@@ -1,0 +1,9 @@
+import { createFileRoute, notFound } from '@tanstack/react-router';
+import { ContentPage, pageHead, ArrowButton } from '@/components/hospic';
+import { assets } from '@/lib/hospic-assets';
+const articles = {
+ 'annual-health-checkups':{title:'Annual health checkups are one of the most valuable investments.',image:assets.blog1,description:'Regular checkups help you understand your health and identify concerns early.',text:'Preventive care starts with a conversation. Discuss your medical history, lifestyle, and any changes in your health with your physician. Your care team can recommend screenings suited to your age and individual needs.'},
+ 'womens-health-screenings':{title:'Explore the recommended health screenings every woman should consider.',image:assets.blog2,description:'A thoughtful approach to preventive care and lifelong wellbeing.',text:'The right screening schedule depends on your age, medical history, and personal risk factors. Speak with your healthcare professional about routine examinations, blood pressure monitoring, and the screenings appropriate for you.'}
+};
+export const Route=createFileRoute('/blog/$slug')({loader:({params})=>{const article=articles[params.slug as keyof typeof articles];if(!article)throw notFound();return article;},head:({loaderData})=>pageHead(loaderData?.title??'Article not found',loaderData?.description??'The requested health article is unavailable.'),component:Article});
+function Article(){const article=Route.useLoaderData();return <ContentPage title="Health Insights" description={article.description}><section className="section"><div className="container"><div className="contact-intro dialog-body"><img src={article.image} alt={article.title}/><h2>{article.title}</h2><p>{article.text}</p><ArrowButton>Talk to a specialist</ArrowButton></div></div></section></ContentPage>;}
